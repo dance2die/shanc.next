@@ -1,6 +1,6 @@
 {
-  "name": "nextjs-with-redis",
-  "version": "0.1.0",
+  "name": "shanc.next",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
