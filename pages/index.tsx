@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import Redis from "ioredis";
 import { useState } from "react";
 
@@ -15,20 +14,20 @@ export default function Home({ data }) {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to my website</h1>
+      <main className="">
+        <h1 className="">Welcome to my website</h1>
 
-        <p className={styles.description}>
+        <p className="">
           Get started by editing <code>pages/index.js</code>
         </p>
 
-        <p className={styles.description}>
+        <p className="">
           View Count: <b>{count}</b>
         </p>
 
@@ -37,7 +36,7 @@ export default function Home({ data }) {
         </button>
       </main>
 
-      <footer className={styles.footer}>
+      <footer className="">
         <a
           href="https://vercel.com/integrations/upstash"
           target="_blank"
