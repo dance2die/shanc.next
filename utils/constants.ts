@@ -1,14 +1,19 @@
 export type Category = "topStories" | "newStories" | "bestStories";
 
-const category: Record<Category, Category> = {
+const CATEGORY: Record<Category, Category> = {
   'topStories': 'topStories',
   'newStories': 'newStories',
   'bestStories': 'bestStories'
 }
 
-const timestamp = Object.keys(category).reduce((acc, key) => {
+const TIMESTAMP = Object.keys(CATEGORY).reduce((acc, key) => {
   acc[key] = `${key}Timestamp`;
   return acc;
 }, {} as Record<Category, string>);
 
-export { category, timestamp }
+
+const ONE_HOUR = 60 * 60;
+const CACHE_EXPIRATION = ONE_HOUR;
+
+
+export { CATEGORY, TIMESTAMP, CACHE_EXPIRATION }
