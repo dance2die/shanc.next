@@ -6,9 +6,9 @@ const category: Record<Category, Category> = {
   'bestStories': 'bestStories'
 }
 
-const cachedDate = Object.keys(category).reduce((acc, key) => {
-  acc[key] = `${key}CachedDate`;
+const timestamp = Object.keys(category).reduce((acc, key) => {
+  acc[key] = `${key}Timestamp`;
   return acc;
 }, {} as Record<Category, string>);
 
-export { category, cachedDate }
+export { category, timestamp }

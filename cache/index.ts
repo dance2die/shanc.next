@@ -1,20 +1,20 @@
 import { Story } from '#types/index';
 import redis from './redis';
-import { category, cachedDate as cachedDateMap, Category } from 'utils/constants';
+import { category, timestamp, Category } from 'utils/constants';
 
 const ONE_HOUR = 60 * 60;
 const CACHE_EXPIRATION = ONE_HOUR;
 
 async function getCachedStories(name: string) {
   let cache = await redis.get(name);
-  let cachedDate = Number(await redis.get(cachedDateMap[name])) ?? Date.now();
+  let cachedDate = Number(await redis.get(timestamp[name])) ?? Date.now();
   let cachedStories = cache ? JSON.parse(cache) : null;
   return { cachedStories, cachedDate };
 }
 
 async function cacheStories(stories: Story[], category: Category) {
   await redis.set(category, JSON.stringify(stories), 'EX', CACHE_EXPIRATION);
-  await redis.set(cachedDateMap[category], Date.now());
+  await redis.set(timestamp[category], Date.now());
 }
 
 const cacheTopStories = async (stories: Story[]) => await cacheStories(stories, category.topStories);
