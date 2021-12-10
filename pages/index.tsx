@@ -1,17 +1,43 @@
+import { Story } from "#types/index";
+import { cacheTopStories, getCachedTopStories } from "cache";
 import Head from "next/head";
-import Redis from "ioredis";
-import { useState } from "react";
+import { getTopStories } from "utils/story";
+// import Redis from "ioredis";
+// import { useState } from "react";
+// import absoluteUrl from "next-absolute-url";
 
-const redis = new Redis(process.env.REDIS_URL);
+export async function getServerSideProps({ req }) {
+  let start = Date.now();
+  const { cachedStories, cachedDate } = await getCachedTopStories();
+  let data = {};
+
+  if (cachedStories) {
+    data = {
+      stories: cachedStories,
+      type: "cache",
+      latency: Date.now() - start,
+      cachedDate,
+    };
+  } else {
+    start = Date.now();
+    const stories: Story[] = await getTopStories();
+
+    cacheTopStories(stories);
+
+    data = { stories, type: "api", latency: Date.now() - start, cachedDate };
+  }
+
+  return { props: { data } };
+}
 
 export default function Home({ data }) {
-  const [count, setCount] = useState(data);
+  // const [count, setCount] = useState(data);
 
-  const increment = async () => {
-    const response = await fetch("/api/incr", { method: "POST" });
-    const data = await response.json();
-    setCount(data.count);
-  };
+  // const increment = async () => {
+  //   const response = await fetch("/api/incr", { method: "POST" });
+  //   const data = await response.json();
+  //   setCount(data.count);
+  // };
 
   return (
     <div className="">
@@ -27,13 +53,13 @@ export default function Home({ data }) {
           Get started by editing <code>pages/index.js</code>
         </p>
 
-        <p className="">
+        {/* <p className="">
           View Count: <b>{count}</b>
-        </p>
+        </p> */}
 
-        <button type="button" onClick={increment}>
+        {/* <button type="button" onClick={increment}>
           Manual Increment (+1)
-        </button>
+        </button> */}
       </main>
 
       <footer className="">
@@ -47,9 +73,4 @@ export default function Home({ data }) {
       </footer>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const data = await redis.incr("counter");
-  return { props: { data } };
 }
