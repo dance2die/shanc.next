@@ -1,12 +1,10 @@
 import { Story } from "#types/index";
 import { cacheTopStories, getCachedTopStories } from "cache";
 import Head from "next/head";
+import { CACHE_EXPIRATION } from "utils/constants";
 import { getTopStories } from "utils/story";
-// import Redis from "ioredis";
-// import { useState } from "react";
-// import absoluteUrl from "next-absolute-url";
 
-export async function getServerSideProps({ req }) {
+export async function getStaticProps() {
   let start = Date.now();
   const { cachedStories, cachedDate } = await getCachedTopStories();
   let data = {};
@@ -27,18 +25,11 @@ export async function getServerSideProps({ req }) {
     data = { stories, type: "api", latency: Date.now() - start, cachedDate };
   }
 
-  return { props: { data } };
+  return { props: { data }, revalidate: CACHE_EXPIRATION / 10 };
 }
 
 export default function Home({ data }) {
-  // const [count, setCount] = useState(data);
-
-  // const increment = async () => {
-  //   const response = await fetch("/api/incr", { method: "POST" });
-  //   const data = await response.json();
-  //   setCount(data.count);
-  // };
-
+  console.log({ data });
   return (
     <div className="">
       <Head>
